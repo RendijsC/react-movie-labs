@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import Avatar from '@mui/material/Avatar';
+
 import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -16,10 +18,27 @@ import img from '../../images/film-poster-placeholder.png'
 
 export default function MovieCard(props) {
   const movie = props.movie;
+
+  const handleAddToFavorite = (e) => {
+    e.preventDefault();
+    props.selectFavorite(movie.id);
+  };
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardHeader title={movie.title} />
-      <CardMedia
+ <CardHeader
+        avatar={
+          movie.favorite ? (
+            <Avatar sx={{ backgroundColor: 'red' }}>
+              <FavoriteIcon />
+            </Avatar>
+          ) : null
+        }
+        title={
+          <Typography variant="h5" component="p">
+            {movie.title}{" "}
+          </Typography>
+        }
+      />      <CardMedia
         sx={{ height: 500 }}
         image={
           movie.poster_path
@@ -44,9 +63,9 @@ export default function MovieCard(props) {
         </Grid>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favoritess" onClick={null}>
-          <FavoriteIcon color="primary" fontSize="large" />
-        </IconButton>
+      <IconButton aria-label="add to favorites" onClick={handleAddToFavorite}>
+        <FavoriteIcon color="primary" fontSize="large" />
+    </IconButton>
         <Link to={`/movies/${movie.id}`}>
           <Button variant="outlined" size="medium" color="primary">
             More Info ...
