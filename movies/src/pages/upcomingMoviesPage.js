@@ -1,45 +1,19 @@
-// import React, { useState, useEffect } from "react";
-// import PageTemplate from '../components/templateMovieListPage';
-// import { getUpcomingMovies } from "../api/tmdb-api"
-// import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
-// const UpcomingMoviesPage = (props) => {
-//   const [movies, setMovies] = useState([]);
-//   const favorites = movies.filter(m => m.favorite)
-//   localStorage.setItem('favorites', JSON.stringify(favorites))
-
-  
-//   useEffect(() => {
-//     getUpcomingMovies().then(movies => {
-//       setMovies(movies);
-//     });
-//   }, []);
-
-//   return (
-//     <PageTemplate
-//       title='Upcoming Movies'
-//       movies={movies}
-//       action={(movie) => {
-//         return <PlaylistAddIcon movie={movie} />;
-//       }}
-      
-//     />
-//   );
-// };
-// export default UpcomingMoviesPage;
-
-import React from "react";
+import React, { useContext } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { useQuery } from "react-query";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import Spinner from "../components/spinner";
 import { getUpcomingMovies } from "../api/tmdb-api";
+import { MoviesContext } from "../contexts/moviesContext";
 
 const UpcomingMoviesPage = (props) => {
   const { data, error, isLoading, isError } = useQuery(
     "upcomingMovies",
     getUpcomingMovies
   );
+
+  const { addToMustWatch } = useContext(MoviesContext); // Import MoviesContext and fix this line
 
   if (isLoading) {
     return <Spinner />;
@@ -51,16 +25,19 @@ const UpcomingMoviesPage = (props) => {
 
   const movies = data.results;
 
-  // Redundant, but necessary to avoid app crashing.
-  const favorites = movies.filter((m) => m.favorite);
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-
   return (
     <PageTemplate
       title="Upcoming Movies"
       movies={movies}
       action={(movie) => {
-        return <PlaylistAddIcon movie={movie} />;
+        return (
+          <>
+            <PlaylistAddIcon
+              movie={movie}
+              onClick={() => addToMustWatch(movie)} // Fix this line
+            />
+          </>
+        );
       }}
     />
   );
