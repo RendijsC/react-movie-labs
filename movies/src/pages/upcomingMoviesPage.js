@@ -13,7 +13,7 @@ const UpcomingMoviesPage = (props) => {
     getUpcomingMovies
   );
 
-  const { addToMustWatch } = useContext(MoviesContext); // Import MoviesContext and fix this line
+  const { addToMustWatch } = useContext(MoviesContext); 
 
   if (isLoading) {
     return <Spinner />;
@@ -34,7 +34,7 @@ const UpcomingMoviesPage = (props) => {
           <>
             <PlaylistAddIcon
               movie={movie}
-              onClick={() => addToMustWatch(movie)} // Fix this line
+              onClick={() => addToMustWatch(movie)} 
             />
           </>
         );
